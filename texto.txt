@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticias de Tecnología - Estilo MacRumors</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f0f0; /* Un gris claro para el fondo general */
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header-top-bar {
+            background-color: #f8f8f8; /* Barra superior más clara, como la de idioma */
+            padding: 8px 15px;
+            font-size: 0.9em;
+            color: #555;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-top-bar .lang-switcher a {
+            color: #007aff;
+            text-decoration: none;
+        }
+        .header-top-bar .options a {
+            color: #555;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+
+        header {
+            background-color: #1d1d1f; /* Color oscuro principal de MacRumors */
+            color: #fff;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo .apple-icon {
+            display: inline-block;
+            width: 24px; /* Ajusta según el tamaño de tu ícono/emoji */
+            height: 24px;
+            margin-right: 8px;
+            /* Podrías usar una imagen SVG o un emoji aquí */
+            /* content: '';  Carácter Apple (puede no renderizar en todos los navegadores/SO) */
+            font-size: 1.5em; /* Ajusta el tamaño del emoji si es necesario */
+            color: #aeb2b9; /* Un gris para el logo de Apple */
+        }
+        /* Usamos un emoji de manzana más compatible */
+        .logo .apple-icon::before {
+            content: '🍎'; /* Emoji de manzana roja */
+        }
+
+
+        nav.main-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav.main-nav ul li {
+            margin-left: 20px;
+        }
+
+        nav.main-nav ul li a {
+            color: #f5f5f7;
+            text-decoration: none;
+            font-size: 0.95em;
+            padding: 5px 0;
+        }
+        nav.main-nav ul li a:hover {
+            color: #2997ff; /* Azul Apple para hover */
+        }
+
+        .hamburger-menu {
+            display: none; /* Oculto en desktop */
+            font-size: 1.8em;
+            color: #f5f5f7;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        article h1 {
+            font-size: 2.2em;
+            color: #1d1d1f;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .article-meta {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        article p {
+            margin-bottom: 1.5em;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        article h2 {
+            font-size: 1.8em;
+            color: #1d1d1f;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #2997ff; /* Línea azul bajo subtítulos */
+            padding-bottom: 5px;
+        }
+
+        .mobile-nav-overlay {
+            display: none; /* Oculto por defecto */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9); /* Fondo oscuro semitransparente */
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .mobile-nav-overlay.active {
+            display: block;
+        }
+
+        .mobile-nav {
+            background-color: #1d1d1f;
+            padding: 20px;
+            min-height: 100%;
+            width: 280px; /* Ancho del menú lateral */
+            box-sizing: border-box; /* Para que el padding no aumente el ancho */
+        }
+        .mobile-nav .close-btn {
+            color: #fff;
+            font-size: 2em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            /* Ajustado para estar dentro del panel visible, considerando el padding */
+            right: calc(100% - 280px + 20px); /* (total width - menu width + padding) */
+            /* Si el menú ocupara toda la pantalla (width: 100%), sería más simple: */
+            /* right: 20px; */
+        }
+         /* Ajuste para el botón de cerrar si el menú está a la izquierda */
+        .mobile-nav-overlay.active .mobile-nav .close-btn {
+            right: auto; /* Resetea el right por si acaso */
+            left: calc(280px - 40px); /* menu width - (padding + button width approx) */
+            /* O más simple si se posiciona respecto al borde del panel */
+            /* left: 240px;  (280px de ancho de menú - 40px aprox para el botón y margen) */
+            /* Lo más fácil es posicionarlo relativo al panel, no al overlay */
+        }
+
+        .mobile-nav-panel-header { /* Para contener el botón de cierre relativo al panel */
+            display: flex;
+            justify-content: flex-end;
+            padding-bottom: 10px; /* Espacio antes de los links */
+        }
+        .mobile-nav-panel-header .close-btn-inner {
+            color: #fff;
+            font-size: 2em;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+
+        .mobile-nav ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px; /* Reducido ya que el botón de cierre tiene su espacio */
+        }
+        .mobile-nav ul li a {
+            display: block;
+            color: #f5f5f7;
+            text-decoration: none;
+            padding: 12px 0;
+            font-size: 1.1em;
+            border-bottom: 1px solid #333;
+        }
+        .mobile-nav ul li a:hover {
+            color: #2997ff;
+        }
+        .mobile-nav .nav-section-title {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 20px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .mobile-nav .social-icons {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+        .mobile-nav .social-icons a {
+            color: #f5f5f7;
+            margin-right: 15px;
+            font-size: 1.5em; /* Para iconos de fuentes o SVGs */
+            text-decoration: none;
+        }
+
+
+        /* Media Query para responsive (móvil) */
+        @media (max-width: 768px) {
+            nav.main-nav {
+                display: none; /* Ocultar navegación principal en móvil */
+            }
+            .hamburger-menu {
+                display: block; /* Mostrar menú hamburguesa en móvil */
+            }
+            .header-top-bar {
+                font-size: 0.8em;
+            }
+            .logo {
+                font-size: 1.5em;
+            }
+            .logo .apple-icon {
+                font-size: 1.3em;
+            }
+            article h1 {
+                font-size: 1.8em;
+            }
+            article p {
+                font-size: 1em;
+            }
+            article h2 {
+                font-size: 1.5em;
+            }
+            .container {
+                margin: 10px;
+                padding: 15px;
+                width: auto; /* El container debe ajustarse al ancho menos los márgenes */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-top-bar">
+        <div class="lang-switcher">
+            <a href="#english">inglés</a> &rarr; <a href="#espanol" style="font-weight:bold;">español</a>
+        </div>
+        <div class="options">
+            <a href="#">...</a> </div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <span class="apple-icon"></span>MacRumors
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#">iPhone 16e</a></li>
+                <li><a href="#">WWDC 2025</a></li>
+                <li><a href="#">iPhone 17</a></li>
+                <li><a href="#">iPad</a></li>
+                </ul>
+        </nav>
+        <button class="hamburger-menu" id="hamburgerBtn" aria-label="Abrir menú">&#9776;</button>
+    </header>
+
+    <div class="mobile-nav-overlay" id="mobileNavOverlay">
+        <div class="mobile-nav" id="mobileNavPanel">
+             <div class="mobile-nav-panel-header">
+                <button class="close-btn-inner" id="closeMobileNavBtn" aria-label="Cerrar menú">&times;</button>
+            </div>
+            <ul>
+                <li><a href="#">Redadas</a></li>
+                <li><a href="#">Guías</a></li>
+                <li><a href="#">Cómo hacerlo</a></li>
+                <li><a href="#">Reseñas</a></li>
+                <li><a href="#">Guía del comprador</a></li>
+                <li><a href="#">Próximos productos</a></li>
+                <li><a href="#">Foros</a></li>
+            </ul>
+            <div class="nav-section-title" style="margin-top:30px; border-top: 1px solid #444; padding-top:20px;">Sistema</div>
+            <ul>
+                <li><a href="#">Archivo</a></li>
+                <li><a href="#">Consejos / Contáctenos</a></li>
+            </ul>
+            <div class="social-icons">
+                <a href="#" aria-label="Instagram">📷</a>
+                <a href="#" aria-label="Facebook">📘</a>
+                <a href="#" aria-label="Twitter">🐦</a>
+                <a href="#" aria-label="YouTube">▶️</a>
+                <a href="#" aria-label="RSS">📡</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <article>
+            <h1>Mark Gurman</h1>
+            <p class="article-meta">Por el personal de MacRumors el 20 de mayo de 2025</p>
+
+            <p>Mark Gurman es un reportero de tecnología de Bloomberg con una larga trayectoria de informes precisos sobre los planes de productos de Apple. Con más de una década de cobertura de Apple, sus informes son seguidos de cerca debido a su precisión, y sus afirmaciones suelen generar expectativas sobre los próximos productos, ya que suelen aparecer al principio de los ciclos de rumores.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+            <h2>Artículos de Mark Gurman</h2>
+            <p>Aquí iría una lista o cuadrícula de artículos...</p>
+            <ul>
+                <li><a href="#">Predicciones de Gurman para el iPhone 17</a></li>
+                <li><a href="#">Análisis de la última Keynote según Gurman</a></li>
+                <li><a href="#">Exclusiva: Nuevos detalles del Apple Watch Series 11</a></li>
+            </ul>
+        </article>
+    </div>
+
+    <footer style="text-align:center; padding: 20px; background-color: #1d1d1f; color:#ccc; font-size:0.9em; margin-top:30px;">
+        <p>&copy; 2025 Tu Sitio de Noticias de Tecnología. Inspirado en MacRumors.</p>
+    </footer>
+
+    <script>
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+        const closeMobileNavBtn = document.getElementById('closeMobileNavBtn');
+        const mobileNavPanel = document.getElementById('mobileNavPanel'); // Referencia al panel del menú
+
+        hamburgerBtn.addEventListener('click', () => {
+            mobileNavOverlay.classList.add('active');
+        });
+
+        closeMobileNavBtn.addEventListener('click', () => {
+            mobileNavOverlay.classList.remove('active');
+        });
+
+        // Opcional: cerrar el menú si se hace clic fuera del contenido del menú (en el overlay)
+        mobileNavOverlay.addEventListener('click', (event) => {
+            // Verifica que el clic fue directamente en el overlay y no en un hijo (como el panel del menú)
+            if (event.target === mobileNavOverlay) {
+                mobileNavOverlay.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+</html>
